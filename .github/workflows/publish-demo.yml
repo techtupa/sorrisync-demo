@@ -1,0 +1,101 @@
+name: Publish portfolio demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: Full commit SHA from the personal repository's main branch
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: publish-portfolio-demo
+  cancel-in-progress: false
+
+env:
+  PORTFOLIO_REPOSITORY: https://github.com/hugomorasneto/sorrisync-demo.git
+
+jobs:
+  validate:
+    if: github.repository == 'techtupa/sorrisync-demo' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+    outputs:
+      base: ${{ steps.revision.outputs.base }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify the selected revision
+        id: revision
+        env:
+          REVISION: ${{ inputs.revision }}
+        run: |
+          if [[ ! "$REVISION" =~ ^[0-9a-f]{40}$ ]]; then
+            echo "::error::Enter the full lowercase commit SHA."
+            exit 1
+          fi
+          base="$(git rev-parse HEAD)"
+          git fetch --no-tags "$PORTFOLIO_REPOSITORY" main
+          git merge-base --is-ancestor "$REVISION" FETCH_HEAD
+          git merge-base --is-ancestor "$base" "$REVISION"
+          if ! git diff --quiet "$base" "$REVISION" -- .github; then
+            echo "::error::GitHub workflow changes must be reviewed in the deployment repository."
+            exit 1
+          fi
+          git checkout --detach "$REVISION"
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
+
+  publish:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Fetch the validated commit
+        env:
+          REVISION: ${{ inputs.revision }}
+          VALIDATED_BASE: ${{ needs.validate.outputs.base }}
+        run: |
+          if [[ "$(git rev-parse HEAD)" != "$VALIDATED_BASE" ]]; then
+            echo "::error::Deployment main moved during validation. Run the workflow again."
+            exit 1
+          fi
+          git fetch --no-tags "$PORTFOLIO_REPOSITORY" main
+          git merge-base --is-ancestor "$REVISION" FETCH_HEAD
+          git merge-base --is-ancestor "$VALIDATED_BASE" "$REVISION"
+      - name: Fast-forward deployment main
+        env:
+          REVISION: ${{ inputs.revision }}
+          VALIDATED_BASE: ${{ needs.validate.outputs.base }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if [[ "$REVISION" == "$VALIDATED_BASE" ]]; then
+            echo "Deployment main already contains the selected revision."
+            exit 0
+          fi
+          authorization="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w 0)"
+          GIT_CONFIG_COUNT=1 \
+            GIT_CONFIG_KEY_0='http.https://github.com/.extraheader' \
+            GIT_CONFIG_VALUE_0="AUTHORIZATION: basic $authorization" \
+            git push origin "$REVISION:refs/heads/main"
