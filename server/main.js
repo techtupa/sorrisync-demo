@@ -10,11 +10,10 @@ async function main() {
     throw new Error('SORRISYNC_DEMO_ORIGIN must be an HTTPS origin without a path or trailing slash.');
   }
 
-  const port = Number(process.env.PORT || process.argv[2] || 4177);
+  const port = Number(process.env.PORT || process.argv[2] || (publicOrigin ? 3000 : 4177));
   if (!Number.isInteger(port) || port < 1 || port > 65535) {
     throw new Error('Choose a port between 1 and 65535.');
   }
-  if (publicOrigin && !process.env.PORT) throw new Error('The hosting platform must supply PORT.');
 
   const appRoot = fileURLToPath(new URL('../', import.meta.url));
   const webRoot = join(appRoot, 'dist-integrated');

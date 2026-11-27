@@ -142,7 +142,8 @@ export async function startPortfolio({ filename, webRoot, port = 0, publicOrigin
     store.close();
     throw error;
   }
-  const localOrigin = 'http://127.0.0.1:' + server.address().port;
+  const address = server.address();
+  const localOrigin = address?.port ? 'http://127.0.0.1:' + address.port : null;
   origin ??= new URL(localOrigin);
   return {
     origin: origin.origin,

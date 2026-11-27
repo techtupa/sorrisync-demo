@@ -9,10 +9,11 @@ Deploy this repository as a standalone Node.js Web App for the portfolio hostnam
 | Package manager | npm |
 | Git branch | main |
 | Root directory | Repository root |
-| Build | npm run build |
+| Build command | npm run build |
+| Build script in API settings | build |
 | Entry file | server/main.js |
 
-Set `SORRISYNC_DEMO_ORIGIN` to `https://demo.sorrisync.com.br`. The server compares requests to this exact origin and uses the platform's `PORT`. A different preview hostname needs its own exact origin. The hosted cookie is host-only, Secure, HttpOnly, and SameSite Strict.
+Set `SORRISYNC_DEMO_ORIGIN` to `https://demo.sorrisync.com.br`. The server compares requests to this exact origin and uses the runtime's `PORT` when provided. Hostinger's loader can route the app when no port variable is provided. A different preview hostname needs its own exact origin. The hosted cookie is host-only, Secure, HttpOnly, and SameSite Strict.
 
 Set `SORRISYNC_DEMO_DATA_DIR` to an absolute writable directory with an existing parent outside the deployment-controlled release tree, including `hbuilds` and `public_html`. Use a dedicated directory beside those directories under the demo site's account. Keep the SQLite file outside Git and outside the asset server's document root. The app creates the configured data directory on startup and retains the existing database.
 
