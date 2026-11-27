@@ -1,0 +1,17 @@
+{
+  "name": "sorrisync-demo",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "build": "npm run build:portfolio --workspace web",
+    "start": "node server/main.js",
+    "test": "node --test server/portfolio.test.js",
+    "lint": "npm run lint --workspace web"
+  },
+  "workspaces": [
+    "apps/web"
+  ]
+}

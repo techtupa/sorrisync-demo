@@ -1,0 +1,295 @@
+@font-face { font-family: Outfit; src: url('/brand/outfit.woff2'); font-weight: 400 800; font-display: swap; }
+@font-face { font-family: 'Plus Jakarta Sans'; src: url('/brand/plus-jakarta-sans.woff2'); font-weight: 400 800; font-display: swap; }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .omnichannel-safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@layer base {
+  :root {
+    /* Core UI - Off-white background, white cards */
+    --background: 40 20% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Semantic Colors - Teal/Petrol Blue Primary, Champagne/Gold Accent */
+    --primary: 185 70% 30%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 40 60% 60%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 40 14% 92%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 40 60% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Structure */
+    --border: 40 14% 88%;
+    --input: 40 14% 88%;
+    --ring: 185 70% 30%;
+    --radius: 0.75rem;
+
+    /* Status Colors */
+    --success: 160 84% 39%;
+    --warning: 38 92% 50%;
+    --critical: 0 84% 60%;
+    --info: 214 95% 60%;
+
+    /* Multi-Tenant Specific Tokens */
+    --tenant-active: 160 84% 39%;
+    --tenant-inactive: 215 16% 47%;
+    --master-control: 222 47% 11%;
+    --tenant-premium: 40 60% 60%;
+    --tenant-pro: 185 70% 30%;
+    --tenant-essential: 215 16% 47%;
+
+    /* Demo Mode Specific Tokens */
+    --demo-primary: 262 80% 50%;
+    --demo-primary-foreground: 0 0% 100%;
+    --demo-secondary: 214 95% 60%;
+    --demo-secondary-foreground: 222 47% 11%;
+    --demo-card: 0 0% 100%;
+    --demo-card-border: 262 80% 90%;
+    --demo-warning-bg: 38 92% 95%;
+    --demo-warning-text: 38 92% 25%;
+
+    /* Codex + Supabase Area Tokens */
+    --codex-surface: 0 0% 100%;
+    --codex-surface-foreground: 222 47% 11%;
+    --codex-border: 214 32% 91%;
+    --codex-accent: 217 91% 60%;
+    --codex-accent-foreground: 0 0% 100%;
+    --codex-badge-bg: 214 32% 91%;
+    --codex-badge-text: 215 25% 27%;
+  }
+
+  .dark {
+    /* Core UI */
+    --background: 222 47% 7%;
+    --foreground: 40 14% 96%;
+    --card: 222 47% 9%;
+    --card-foreground: 40 14% 96%;
+    --popover: 222 47% 9%;
+    --popover-foreground: 40 14% 96%;
+
+    /* Semantic Colors */
+    --primary: 185 60% 45%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 40 50% 50%;
+    --secondary-foreground: 40 14% 96%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 40 50% 50%;
+    --accent-foreground: 40 14% 96%;
+    --destructive: 0 62.8% 40.6%;
+    --destructive-foreground: 40 14% 96%;
+
+    /* Structure */
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 185 60% 45%;
+
+    /* Multi-Tenant Specific Tokens */
+    --tenant-active: 160 84% 39%;
+    --tenant-inactive: 215 20% 65%;
+    --master-control: 222 47% 11%;
+    --tenant-premium: 40 50% 50%;
+    --tenant-pro: 185 60% 45%;
+    --tenant-essential: 215 20% 65%;
+
+    /* Demo Mode Specific Tokens */
+    --demo-primary: 262 80% 60%;
+    --demo-primary-foreground: 0 0% 100%;
+    --demo-secondary: 214 95% 60%;
+    --demo-secondary-foreground: 222 47% 11%;
+    --demo-card: 222 47% 9%;
+    --demo-card-border: 262 80% 20%;
+    --demo-warning-bg: 38 92% 15%;
+    --demo-warning-text: 38 92% 70%;
+
+    /* Codex + Supabase Area Tokens */
+    --codex-surface: 222 47% 9%;
+    --codex-surface-foreground: 40 14% 96%;
+    --codex-border: 217 32% 17%;
+    --codex-accent: 217 91% 60%;
+    --codex-accent-foreground: 0 0% 100%;
+    --codex-badge-bg: 217 32% 17%;
+    --codex-badge-text: 215 20% 65%;
+  }
+
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.625;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    text-wrap: balance;
+    color: hsl(var(--foreground));
+  }
+
+  h1 { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.03em; }
+  h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; line-height: 1.2; letter-spacing: -0.02em; }
+  h3 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 600; line-height: 1.3; letter-spacing: -0.01em; }
+  h4 { font-size: 1.25rem; font-weight: 600; line-height: 1.4; }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  .font-mono {
+    font-family: 'Fira Code', monospace;
+  }
+}
+
+@media print {
+  body[data-print-whatsapp-statement='true'] * {
+    visibility: hidden;
+  }
+
+  body[data-print-whatsapp-statement='true'] [data-whatsapp-statement-report='true'],
+  body[data-print-whatsapp-statement='true'] [data-whatsapp-statement-report='true'] * {
+    visibility: visible;
+  }
+
+  body[data-print-whatsapp-statement='true'] [data-whatsapp-statement-report='true'] {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    border: 0;
+    box-shadow: none;
+  }
+
+  body[data-print-whatsapp-statement='true'] [data-whatsapp-statement-actions='true'] {
+    display: none !important;
+  }
+}
+
+@layer utilities {
+  .shadow-premium {
+    box-shadow: 0 20px 40px -10px rgba(13, 115, 119, 0.1), 0 8px 16px -4px rgba(13, 115, 119, 0.05);
+  }
+  .shadow-soft {
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+  }
+  .bento-card {
+    @apply bg-card border border-border/50 rounded-2xl shadow-soft hover:shadow-premium transition-all duration-300 overflow-hidden;
+  }
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
+  .demo-card {
+    @apply bg-[hsl(var(--demo-card))] border border-[hsl(var(--demo-card-border))] rounded-2xl shadow-soft hover:shadow-premium transition-all duration-300;
+  }
+  .demo-banner {
+    @apply bg-amber-50 border-b border-amber-200 text-amber-800 text-xs py-1.5 px-4 flex items-center justify-center gap-2 transition-colors dark:bg-amber-950 dark:border-amber-900 dark:text-amber-400 z-50 relative;
+  }
+  .demo-warning-panel {
+    @apply bg-[hsl(var(--demo-warning-bg))] text-[hsl(var(--demo-warning-text))] border border-amber-200 dark:border-amber-900 rounded-xl p-4 flex items-start gap-3;
+  }
+
+  /* Codex Specific Utilities */
+  .codex-card-elevation {
+    @apply bg-[hsl(var(--codex-surface))] text-[hsl(var(--codex-surface-foreground))] border border-[hsl(var(--codex-border))] rounded-xl shadow-soft hover:shadow-md hover:-translate-y-0.5 transition-all duration-300;
+  }
+  .codex-gradient {
+    @apply bg-gradient-to-br from-[hsl(var(--codex-surface))] to-muted/30;
+  }
+  .badge-tech {
+    @apply bg-[hsl(var(--codex-badge-bg))] text-[hsl(var(--codex-badge-text))] border-transparent font-mono text-[10px] tracking-wider uppercase px-2 py-0.5;
+  }
+
+  /* Standardized Badges */
+  .badge-success {
+    @apply bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400 dark:border-emerald-900;
+  }
+  .badge-warning {
+    @apply bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400 dark:border-amber-900;
+  }
+  .badge-error {
+    @apply bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-900;
+  }
+  .badge-future {
+    @apply bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/30 dark:text-indigo-400 dark:border-indigo-900;
+  }
+  .badge-blocked {
+    @apply bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-900 dark:text-slate-400 dark:border-slate-800;
+  }
+  .badge-premium {
+    @apply bg-[hsl(var(--secondary))]/10 text-[hsl(var(--secondary))] border-[hsl(var(--secondary))]/20;
+  }
+  .badge-simulated {
+    @apply bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400 dark:border-blue-900;
+  }
+
+  .legal-doc-container {
+    @apply space-y-8;
+  }
+
+  .legal-prose {
+    @apply text-base text-foreground;
+  }
+
+  .legal-prose .legal-section {
+    @apply scroll-mt-24;
+  }
+
+  .legal-prose .legal-section + .legal-section {
+    @apply border-t border-border/50 pt-8;
+  }
+
+  .legal-prose h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: 0;
+    margin-bottom: 0.75rem;
+  }
+
+  .legal-prose p {
+    @apply mb-4 leading-7 text-muted-foreground;
+  }
+
+  .legal-prose ul {
+    @apply list-disc space-y-2 pl-5 text-muted-foreground;
+  }
+
+  .legal-prose li {
+    @apply leading-7;
+  }
+}
+
+@media (max-width: 639px) {
+ .portfolio-header .portfolio-aux { display: none; }
+ .portfolio-header .portfolio-evidence { white-space: nowrap; font-size: .75rem; }
+ .portfolio-header [aria-haspopup=menu] > div.max-w-\[140px\] { max-width: 6rem; }
+ .portfolio-header [aria-haspopup=menu] { padding-inline: .45rem; }
+ .portfolio-header > div { padding-inline: .65rem; }
+}
+@media (max-width: 639px) {
+ .portfolio-header > div { flex-wrap: wrap; row-gap: .35rem; }
+ .portfolio-header > div > div:last-child { width: 100%; min-width: 0; justify-content: flex-end; }
+}
