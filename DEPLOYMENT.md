@@ -13,6 +13,16 @@ Deploy this repository as a standalone Node.js Web App for the portfolio hostnam
 | Build script in API settings | build |
 | Entry file | server/main.js |
 
+## Publish a revision
+
+Commit demo changes to `main` in the [personal review repository](https://github.com/hugomorasneto/sorrisync-demo). In the [Tech Tupã deployment repository](https://github.com/techtupa/sorrisync-demo/actions/workflows/publish-demo.yml), run **Publish portfolio demo** from `main` and supply the full commit SHA.
+
+The workflow runs the Node.js 24 install, tests, lint, and build against that exact commit. On success, it fast-forwards the Tech Tupã deployment branch to the same commit. The Hostinger integration builds the site from that branch. Check that the completed Hostinger deployment names the promoted revision and that the demo opens over HTTPS.
+
+The workflow uses GitHub's temporary job token in the Tech Tupã repository and requires no shared deployment secret. Changes under `.github` need review in the deployment repository and must be kept in both repositories. A failed check or divergent history stops promotion.
+
+## Runtime settings
+
 Set `SORRISYNC_DEMO_ORIGIN` to `https://demo.sorrisync.com.br`. The server compares requests to this exact origin and uses the runtime's `PORT` when provided. Hostinger's loader can route the app when no port variable is provided. A different preview hostname needs its own exact origin. The hosted cookie is host-only, Secure, HttpOnly, and SameSite Strict.
 
 Set `SORRISYNC_DEMO_DATA_DIR` to an absolute writable directory with an existing parent outside the deployment-controlled release tree, including `hbuilds` and `public_html`. Use a dedicated directory beside those directories under the demo site's account. Keep the SQLite file outside Git and outside the asset server's document root. The app creates the configured data directory on startup and retains the existing database.

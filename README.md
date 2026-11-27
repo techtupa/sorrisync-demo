@@ -2,6 +2,8 @@
 
 Standalone English evaluation edition for REWORKIO. It uses the original SorriSync React screens with fictional clinics, patients, and transactions. Tech Tupã maintains the full product in a private repository.
 
+Open the [hosted demo](https://demo.sorrisync.com.br/omnichannel) and inspect the [review source](https://github.com/hugomorasneto/sorrisync-demo).
+
 ## Run the evaluation edition
 
 Use Node.js 24 or later.
